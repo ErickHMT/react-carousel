@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import LazyLoad from "react-lazyload";
+import { useRef, useState } from "react";
 import "./styles.scss";
 
 interface ImageProps {
@@ -11,22 +10,23 @@ export default function Image(props: ImageProps) {
   const { src, alt } = props;
   const refPlaceholder = useRef<HTMLDivElement>(null);
 
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+
   const removePlaceholder = () => {
     refPlaceholder?.current?.remove();
+    setImageLoaded(true);
   };
 
   return (
     <div className="image-container">
       <div ref={refPlaceholder} className="placeholder"></div>
-      <LazyLoad>
-        <img
-          className="lazy-image"
-          onLoad={removePlaceholder}
-          onError={removePlaceholder}
-          src={src}
-          alt={alt}
-        />
-      </LazyLoad>
+      <img
+        className={`carousel-image ${imageLoaded ? "image-visible" : ""}`}
+        onLoad={removePlaceholder}
+        onError={removePlaceholder}
+        src={src}
+        alt={alt}
+      />
     </div>
   );
 }
