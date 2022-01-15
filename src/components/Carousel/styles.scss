@@ -1,0 +1,37 @@
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-title {
+  position: absolute;
+  margin: 0;
+  z-index: 1;
+  color: rgb(19, 19, 19);
+  top: -40px;
+  left: 110px;
+}
+
+.btn-carousel {
+  margin: 10px;
+  padding: 10px;
+  // border-radius: 50%;
+  cursor: pointer;
+  border: 0;
+  transition: 0.3s;
+}
+
+.btn-carousel:hover {
+  background: #ddd;
+  transform: scale(1.1);
+}
+
+.btn-carousel:disabled:hover {
+  transform: scale(1);
+}
+
+// .carousel-element {
+//   display: flex;
+// }
