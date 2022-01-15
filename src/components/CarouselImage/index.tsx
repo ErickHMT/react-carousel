@@ -18,8 +18,8 @@ export default function CarouselImage(props: ImageProps) {
   };
 
   return (
-    <div className="image-container">
-      <div ref={refPlaceholder} className="placeholder"></div>
+    <div className="carousel-image-container">
+      <div ref={refPlaceholder} className="carousel-image-placeholder"></div>
       <img
         className={`carousel-image ${imageLoaded ? "image-visible" : ""}`}
         onLoad={removePlaceholder}
