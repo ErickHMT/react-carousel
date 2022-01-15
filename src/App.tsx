@@ -1,6 +1,5 @@
 import CarouselModel from "./models/CarouselModel";
 import Carousel from "./components/Carousel";
-import "./App.scss";
 
 const data: CarouselModel[] = [
   {

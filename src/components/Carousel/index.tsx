@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import CarouselModel from "../../models/CarouselModel";
-import Image from "../Image";
+import CarouselImage from "../CarouselImage";
 import "./styles.scss";
 
 interface CarouselProps {
@@ -13,11 +14,6 @@ export default function Carousel(props: CarouselProps) {
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  useEffect(() => {
-    // const images = data.map((el) => el.images);
-    // setCarouselImages(Array.prototype.concat.apply([], images));
-  }, []);
-
   const nextSlide = () => {
     setCurrentIndex(currentIndex + 1);
   };
@@ -29,37 +25,42 @@ export default function Carousel(props: CarouselProps) {
   return (
     <div className="carousel-container">
       <button
-        className="btn-carousel"
+        className="btn-carousel left-arrow"
         onClick={previousSlide}
         disabled={currentIndex === 0}
-      >
-        Previous
-      </button>
+      ></button>
       {data.map((el, index) => (
         <div key={`carousel-index-${index}`}>
           {index === currentIndex && (
-            <>
-              <h2 className="carousel-title">{el.title}</h2>
-              <div style={{ display: "flex", width: "900px", height: "300px" }}>
-                {el.images?.map((image, index) => (
-                  <Image
-                    key={`carousel-${index}`}
-                    alt={`carousel-${index}`}
-                    src={image}
-                  />
-                ))}
-              </div>
-            </>
+            <SwitchTransition mode="out-in">
+              <CSSTransition
+                classNames="fade"
+                addEndListener={(node, done) => {
+                  node.addEventListener("transitionend", done, false);
+                }}
+              >
+                <>
+                  <h2 className="carousel-title">{el.title}</h2>
+                  <div className="carousel-images">
+                    {el.images?.map((image, index) => (
+                      <CarouselImage
+                        key={`carousel-${index}`}
+                        alt={`carousel-${index}`}
+                        src={image}
+                      />
+                    ))}
+                  </div>
+                </>
+              </CSSTransition>
+            </SwitchTransition>
           )}
         </div>
       ))}
       <button
-        className="btn-carousel"
+        className="btn-carousel right-arrow"
         onClick={nextSlide}
         disabled={currentIndex === length - 1}
-      >
-        Next
-      </button>
+      ></button>
     </div>
   );
 }

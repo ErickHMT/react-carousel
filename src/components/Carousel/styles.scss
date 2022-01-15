@@ -14,23 +14,70 @@
   left: 110px;
 }
 
+.carousel-images {
+  display: flex;
+  background: #c5cfde;
+  width: 900px;
+  height: 300px;
+}
+
 .btn-carousel {
   cursor: pointer;
   margin: 10px;
-  padding: 10px;
-  border: 0;
+  border: none;
+  border-radius: 50%;
   transition: 0.3s;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background-image: url("../../assets/img/down-arrow.svg");
+  background-origin: content-box;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: 0.3s;
+  box-shadow: 3px 2px 12px -5px rgba(0, 0, 0, 0.45);
 }
 
-.btn-carousel:hover {
-  background: #ddd;
-  transform: scale(1.1);
+.left-arrow {
+  transform: rotate(90deg);
+  &:hover {
+    transform: rotate(90deg) scale(1.1);
+  }
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 }
 
-.btn-carousel:disabled:hover {
-  transform: scale(1);
+.right-arrow {
+  transform: rotate(270deg);
+  &:hover {
+    transform: rotate(270deg) scale(1.1);
+  }
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 }
 
-// .carousel-element {
-//   display: flex;
-// }
+.fade-enter .btn {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.fade-enter-active .btn {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-exit .btn {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-exit-active .btn {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.fade-enter-active .btn,
+.fade-exit-active .btn {
+  transition: opacity 500ms, transform 500ms;
+}

@@ -6,7 +6,7 @@ interface ImageProps {
   alt: string;
 }
 
-export default function Image(props: ImageProps) {
+export default function CarouselImage(props: ImageProps) {
   const { src, alt } = props;
   const refPlaceholder = useRef<HTMLDivElement>(null);
 
