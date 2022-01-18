@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CarouselModel from "../../models/CarouselModel";
 import CarouselImage from "../CarouselImage";
 import "./styles.scss";
@@ -9,9 +9,30 @@ interface CarouselProps {
 
 export default function Carousel(props: CarouselProps) {
   const { data } = props;
-  const length = data.length;
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [sections, setSections] = useState<Array<Array<string>>>([]);
+
+  useEffect(() => {
+    let selectedImages: string[] = [];
+    let carouselChunks: Array<Array<string>> = [];
+
+    // Get a random image from each block
+    data.forEach((block: CarouselModel) => {
+      const images = block.images;
+      const randomImage = images[Math.floor(Math.random() * images.length)];
+
+      selectedImages.push(randomImage);
+    });
+
+    // Split the selected images into chunks of 4 elements
+    for (let i = 0; i < selectedImages.length; i += 4) {
+      const chunk = selectedImages.slice(i, i + 4);
+      carouselChunks.push(chunk);
+    }
+
+    setSections(carouselChunks);
+  }, [data]);
 
   const nextSlide = () => {
     setCurrentIndex(currentIndex + 1);
@@ -21,9 +42,9 @@ export default function Carousel(props: CarouselProps) {
     setCurrentIndex(currentIndex - 1);
   };
 
-  return length === 0 ? null : (
+  return sections.length === 0 ? null : (
     <div className="carousel-container">
-      {data.map((el, index) => (
+      {sections.map((el, index) => (
         <>
           {index === currentIndex && (
             <>
@@ -33,9 +54,8 @@ export default function Carousel(props: CarouselProps) {
                 disabled={currentIndex === 0}
               ></button>
               <div className="carousel-content">
-                <h2 className="carousel-title">{el.title}</h2>
                 <div className="carousel-images">
-                  {el.images?.map((image, index) => (
+                  {el?.map((image, index) => (
                     <CarouselImage
                       key={`carousel-${index}`}
                       alt={`carousel-${index}`}
@@ -47,7 +67,7 @@ export default function Carousel(props: CarouselProps) {
               <button
                 className="btn-carousel right-arrow"
                 onClick={nextSlide}
-                disabled={currentIndex === length - 1}
+                disabled={currentIndex === sections.length - 1}
               ></button>
             </>
           )}
