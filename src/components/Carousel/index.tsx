@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
-import CarouselModel from "../../models/CarouselModel";
-import CarouselImage from "../CarouselImage";
+import CarouselModel from "../../models/CarouselBlockModel";
+import CarouselBlock from "../CarouselBlock";
 import "./styles.scss";
 
-interface CarouselProps {
+interface ICarouselProps {
   data: CarouselModel[];
 }
 
-export default function Carousel(props: CarouselProps) {
+export default function Carousel(props: ICarouselProps) {
   const { data } = props;
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [sections, setSections] = useState<Array<Array<string>>>([]);
+  const [chunks, setChunks] = useState<Array<Array<CarouselModel>>>([]);
 
   useEffect(() => {
-    let selectedImages: string[] = [];
-    let carouselChunks: Array<Array<string>> = [];
+    let carouselChunks: Array<Array<CarouselModel>> = [];
 
-    // Get a random image from each block
-    data.forEach((block: CarouselModel) => {
-      const images = block.images;
-      const randomImage = images[Math.floor(Math.random() * images.length)];
-
-      selectedImages.push(randomImage);
-    });
-
-    // Split the selected images into chunks of 4 elements
-    for (let i = 0; i < selectedImages.length; i += 4) {
-      const chunk = selectedImages.slice(i, i + 4);
-      carouselChunks.push(chunk);
+    // Split the blocks into chunks of 4 elements
+    for (let i = 0; i < data.length; i += 4) {
+      const blocks = data.slice(i, i + 4);
+      carouselChunks.push(blocks);
     }
 
-    setSections(carouselChunks);
+    setChunks(carouselChunks);
   }, [data]);
 
   const nextSlide = () => {
@@ -42,9 +33,9 @@ export default function Carousel(props: CarouselProps) {
     setCurrentIndex(currentIndex - 1);
   };
 
-  return sections.length === 0 ? null : (
+  return chunks.length === 0 ? null : (
     <div className="carousel-container">
-      {sections.map((el, index) => (
+      {chunks.map((chunk, index) => (
         <>
           {index === currentIndex && (
             <>
@@ -53,21 +44,15 @@ export default function Carousel(props: CarouselProps) {
                 onClick={previousSlide}
                 disabled={currentIndex === 0}
               ></button>
-              <div className="carousel-content">
-                <div className="carousel-images">
-                  {el?.map((image, index) => (
-                    <CarouselImage
-                      key={`carousel-${index}`}
-                      alt={`carousel-${index}`}
-                      src={image}
-                    />
-                  ))}
-                </div>
+              <div className="carousel-images">
+                {chunk?.map((block, index) => (
+                  <CarouselBlock key={`carousel-${index}`} block={block} />
+                ))}
               </div>
               <button
                 className="btn-carousel right-arrow"
                 onClick={nextSlide}
-                disabled={currentIndex === sections.length - 1}
+                disabled={currentIndex === chunks.length - 1}
               ></button>
             </>
           )}

@@ -1,7 +1,7 @@
-import CarouselModel from "./models/CarouselModel";
+import CarouselBlockModel from "./models/CarouselBlockModel";
 import Carousel from "./components/Carousel";
 
-const data: CarouselModel[] = [
+const data: CarouselBlockModel[] = [
   {
     title: "First Block",
     images: [
